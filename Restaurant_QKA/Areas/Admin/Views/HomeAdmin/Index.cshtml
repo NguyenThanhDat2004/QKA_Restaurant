@@ -1,0 +1,99 @@
+﻿@model List<Restaurant_QKA.Models.Invoice>
+@using System.Globalization
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<section class="container-fluid" style="width:1300px">
+    <div class="tab-content tab-content-basic w-100" style="width:1200px">
+        <div class="tab-pane fade show active w-100" id="overview" role="tabpanel" aria-labelledby="overview">
+            <div class="row w-100">
+                <div class="col-lg-12">
+                    <div class="statistics-details d-flex align-items-center justify-content-between w-100">
+                        <div>
+                            <p class="statistics-title">Tổng Số Đơn Hàng Đã Được Tạo:</p>
+                            <h3 class="rate-percentage">@ViewBag.CountTotalOrders</h3>
+                        </div>
+                        <div>
+                            <p class="statistics-title">Tổng Số Đơn Hàng Thành Công:</p>
+                            <h3 class="rate-percentage">@ViewBag.CountSuccessOrders</h3>
+                        </div>
+                        <div>
+                            <p class="statistics-title">Tổng Số Tài Khoản Khách Hàng:</p>
+                            <h3 class="rate-percentage">@ViewBag.CountCus</h3>
+                        </div>
+                        <div class="d-none d-md-block">
+                            <p class="statistics-title">Tổng Số Món Trong Hệ Thống:</p>
+                            <h3 class="rate-percentage">@ViewBag.CountProducts</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row w-100">
+            <div class="col-lg-8 d-flex flex-column">
+                <div class="row flex-grow">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card card-rounded w-100">
+                            <div class="card-body">
+                                <div class="d-sm-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h4 class="card-title card-title-dash">Tổng Doanh Thu:</h4>
+                                        <p class="card-subtitle card-subtitle-dash">Đây là tổng danh thu với những đơn hàng có trạng thái thành công</p>
+                                    </div>
+                                </div>
+                                <div class="d-sm-flex align-items-center mt-1 justify-content-between">
+                                    <div class="d-sm-flex align-items-center mt-4 justify-content-between">
+                                        @if (ViewBag.Revenue == null)
+                                        {
+                                            <h2 class="me-2 fw-bold">0</h2>
+                                        }
+                                        else
+                                        {
+                                            <h2>
+                                                @String.Format(new CultureInfo("vi-VN"), "{0:N0} VND", @ViewBag.Revenue)
+                                            </h2>
+                                        }
+                                    </div>
+                                    <div class="me-3">
+                                        <div id="marketingOverview-legend"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã Hóa Đơn</th>
+                        <th>Mã Đơn Hàng</th>
+                        <th>Tổng Tiền</th>
+                        <th>Ngày Giao Dịch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="max-width: 150px; word-wrap: break-word;">@item.InvoiceID</td>
+                            <td style="max-width: 150px; word-wrap: break-word;">@item.OrderID</td>
+                            <td style="max-width: 150px; word-wrap: break-word;">
+                                @((item.Total ?? 0).ToString("C0", System.Globalization.CultureInfo.CreateSpecificCulture("vi-VN")))
+                            </td>
+                            <td>@item.CreatedDate.ToString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

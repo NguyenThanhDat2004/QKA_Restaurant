@@ -1,0 +1,78 @@
+﻿@model Restaurant_QKA.Models.Customer
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<section class="vh-100" style="margin-top:200px">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="~/Content/Image_Login.png"
+                     class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <h2 class="text-uppercase text-center mb-5">Đăng Nhập</h2>
+                @if (ViewBag.Mess != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Lỗi:</strong> @ViewBag.Mess
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                <form method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Email input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input type="text" id="Email" name="Email" class="form-control form-control-lg" placeholder="Nhập email của bạn" required />
+                        <label class="form-label" for="Email">Email</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-3">
+                        <input type="password" id="HashPass" name="HashPass" class="form-control form-control-lg" placeholder="Nhập mật khẩu" required />
+                        <label class="form-label" for="HashPass">Mật Khẩu</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Checkbox -->
+                        <div class="form-check mb-0">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                            <label class="form-check-label" for="form2Example3">Ghi Nhớ Tôi</label>
+                        </div>
+                        <a href="#!" class="text-warning">Quên Mật Khẩu?</a>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2 justify-content-between align-items-center">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem; background-color: #C5705D; color: white">
+                            Đăng Nhập
+                        </button>
+                        <p class="small fw-bold mt-2 pt-1 mb-0"> Bạn Chưa Có Tài Khoản? <a href="@Url.Action("Register","User")" class="link-danger">Đăng Ký</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if (ViewBag.Success == true)
+    {
+    <text>
+            Swal.fire({
+                title: 'Đăng nhập thành công!',
+                text: 'Chào mừng đến với Seft_Restaurant!',
+                icon: 'success',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: 'OK',
+                timer: 3000,
+            }).then(() => {
+                window.location.href = '/Home/Index';
+            });
+    </text>
+    }
+</script>
+

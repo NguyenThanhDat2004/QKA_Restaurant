@@ -1,0 +1,157 @@
+﻿@using System.Globalization
+@model IEnumerable<Restaurant_QKA.Models.MenuItem>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+    <div class="container-fluid fruite" style="background-color: #EEEEEE; border-radius:30px; margin-top:150px">
+        <div class="container py-5">
+            <div class="tab-class text-center">
+                <div class="row g-4">
+                    <div class="col-lg-7 text-start">
+                        <h1>Menu</h1>
+                    </div>
+                    <div class="col-lg-5 text-end d-flex justify-content-lg-end h-25">
+                        <!-- HillClimbing -->
+                        @if (Session["UserID"] != null)
+                        {
+                            <div class="d-flex gap-3">
+                                <a href="@Url.Action("Index", "HillClimbing", new { area = "User" })" class="btn">
+                                    <i class="fa-solid fa-filter"></i> Lọc
+                                </a>
+                            </div>
+                        }
+                        <div class="d-flex gap-3">
+                            <!-- Sort By Dropdown -->
+                            <select id="sortBy" class="form-select" onchange="applySortAndSearch()">
+                                <option value="0">Sắp Xếp Theo</option>
+                                <option value="1">Tên A-Z</option>
+                                <option value="2">Tên Z-A</option>
+                                <option value="3">Giá Tăng Dần</option>
+                                <option value="4">Giá Giảm Dần</option>
+                            </select>
+
+                            <!-- Search Box -->
+                            <input type="text" id="searchInput" class="form-control" placeholder="Tìm Kiếm Món" onkeyup="applySortAndSearch()" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="row g-4" id="menuItemsContainer">
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+
+                                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4 menu-item">
+                                        <div class="card shadow-sm border-light rounded position-relative h-100">
+                                            <div class="card-body text-center p-3">
+                                                <img src="@Url.Content("~/Content/MenuItems/" + item.ImageUrl)" class="rounded-2 img-fluid" style="width: 100%; height: 200px; object-fit: cover;" alt="@item.Name">
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a href="/User/Menu/DetailMenuItem/@item.ItemID" class="h5 text-dark d-block mb-2" style="font-weight: bold;">@item.Name</a>
+                                                <div class="d-flex justify-content-center my-3">
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    <i class="fas fa-star text-muted"></i>
+                                                </div>
+                                                <h4 class="mb-3 text-success" style="font-weight: bold; font-size: 1.2rem;">@String.Format(new CultureInfo("vi-VN"), "{0:N0} VND", item.Price)</h4> <!-- Hiển thị giá dưới dạng tiền tệ -->
+                                                <!-- Thêm vào giỏ hàng -->
+                                                <a href="@Url.Action("AddToCart", "Carts", new { menuItemId = item.ItemID, quantity = 1 })" class="btn btn-primary rounded-pill mt-3" style="font-size: 1rem; padding: 10px 20px;">
+                                                    Thêm vào giỏ hàng
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bạn có thể thêm các phần tử tương tự vào đây để tạo nhiều sản phẩm -->
+
+
+
+                                }
+                            }
+                            else
+                            {
+                                <p>No items available to display.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Lưu danh sách ban đầu
+    var originalItems = Array.from(document.querySelectorAll('.menu-item'));
+
+    // Function to apply sorting and searching
+    function applySortAndSearch() {
+        var searchQuery = document.getElementById("searchInput").value.toLowerCase();
+        var sortOption = document.getElementById("sortBy").value;
+
+        // Lọc và sắp xếp lại danh sách món ăn
+        var filteredItems = originalItems.filter(function (item) {
+            var itemName = item.querySelector('.h5').textContent.toLowerCase();
+            return itemName.includes(searchQuery);
+        });
+
+        // Sắp xếp các món ăn theo lựa chọn
+        switch (sortOption) {
+            case "1": // Sort by Name A-Z
+                filteredItems.sort(function (a, b) {
+                    return a.querySelector('.h5').textContent.localeCompare(b.querySelector('.h5').textContent);
+                });
+                break;
+            case "2": // Sort by Name Z-A
+                filteredItems.sort(function (a, b) {
+                    return b.querySelector('.h5').textContent.localeCompare(a.querySelector('.h5').textContent);
+                });
+                break;
+            case "3": // Sort by Price Ascending
+                filteredItems.sort(function (a, b) {
+                    return parseFloat(a.querySelector('h4').textContent.replace(/[^0-9.-]+/g, "")) - parseFloat(b.querySelector('h4').textContent.replace(/[^0-9.-]+/g, ""));
+                });
+                break;
+            case "4": // Sort by Price Descending
+                filteredItems.sort(function (a, b) {
+                    return parseFloat(b.querySelector('h4').textContent.replace(/[^0-9.-]+/g, "")) - parseFloat(a.querySelector('h4').textContent.replace(/[^0-9.-]+/g, ""));
+                });
+                break;
+            default:
+                break;
+        }
+
+        // Gắn lại các món ăn đã sắp xếp và lọc vào container
+        var container = document.getElementById('menuItemsContainer');
+        container.innerHTML = '';
+        filteredItems.forEach(function (item) {
+            container.appendChild(item);
+        });
+    }
+
+    // Thêm sự kiện lắng nghe thay đổi nội dung ô tìm kiếm
+    document.getElementById("searchInput").addEventListener('input', function () {
+        if (this.value === "") {
+            // Nếu ô tìm kiếm bị xóa, phục hồi lại danh sách ban đầu
+            var container = document.getElementById('menuItemsContainer');
+            container.innerHTML = '';
+            originalItems.forEach(function (item) {
+                container.appendChild(item);
+            });
+        } else {
+            applySortAndSearch();
+        }
+    });
+
+</script>
+

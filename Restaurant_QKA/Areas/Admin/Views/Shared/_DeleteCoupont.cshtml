@@ -1,0 +1,37 @@
+﻿@model Restaurant_QKA.Models.Coupon
+
+<div class="card shadow-sm p-4 mb-4 bg-white rounded">
+    <!-- Name -->
+    <h3 class="card-title text-center">@Model.Name</h3>
+
+    <div class="row">
+        <!-- Value -->
+        <div class="form-group col-md-6">
+            <strong>Giá Trị Mã:</strong>
+            <p class="form-control-plaintext">@Html.DisplayFor(m => m.Value)</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- CreatedDate -->
+        <div class="form-group col-md-6">
+            <strong>Ngày Tạo Mã:</strong>
+            <p class="form-control-plaintext">@Html.DisplayFor(m => m.CreatedDate)</p>
+        </div>
+        <!-- CreatedManager -->
+        <div class="form-group col-md-6">
+            <strong>Người Tạo Mã:</strong>
+            <p class="form-control-plaintext">@Html.DisplayFor(m => m.CreatedManagerID)</p>
+        </div>
+    </div>
+
+    <!-- Form Delete -->
+    @using (Html.BeginForm("Delete", "Coupon", FormMethod.Post, new { id = "deleteCoupontForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-danger">Delete Coupont</button>
+        </div>
+    }
+</div>
+

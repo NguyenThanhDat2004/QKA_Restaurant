@@ -1,0 +1,48 @@
+﻿@model Restaurant_QKA.Models.Coupon
+
+@using (Html.BeginForm("Edit", "Coupon", new { area = "Admin"}, FormMethod.Post, new { @id = "editCoupontForm", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Hidden field to store Product ID -->
+    @Html.HiddenFor(m => m.CouponID)
+
+    <div class="billboard">
+        <div class="form-row row">
+            <!-- Name -->
+            <div class="form-group col-md-6">
+                @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name, " ", new { @class = "text-danger" })
+            </div>
+
+            <!-- Value -->
+            <div class="form-group col-md-6">
+                @Html.LabelFor(m => m.Value, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Value, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Value, " ", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-row row">
+            <!-- CreatedDate -->
+            <div class="form-group col-md-6">
+                @Html.LabelFor(m => m.CreatedDate, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.CreatedDate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CreatedDate, " ", new { @class = "text-danger" })
+            </div>
+            <!-- CreatedManager -->
+            <div class="form-group col-md-6">
+                @Html.LabelFor(m => m.CreatedManagerID, htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(m => m.CreatedManagerID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.CreatedManagerID, " ", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Submit button -->
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-warning btn-block">Lưu Thay Đổi</button>
+        </div>
+    </div>
+}
+
