@@ -182,14 +182,3 @@ Contributions are welcome! Follow the steps below to submit improvements.
 5. Open a Pull Request
 
 ⭐ If you like this project, please give it a **star** to support development!
-
----
-
-Would you like me to make a **“Portfolio-optimized version”** next — where I add:
-
-* Animated GitHub badges
-* Tech stack section (C#, ASP.NET, SQL, etc.)
-* Project demo screenshots
-* Live status badges (build, code quality, repo size)?
-
-It’ll make your `README` look like a professional portfolio showcase for recruiters.
